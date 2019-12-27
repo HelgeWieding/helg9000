@@ -3,10 +3,9 @@
 // found in the LICENSE file.
 
 import 'dart:async';
-
 import 'package:flutter_clock_helper/model.dart';
 import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
+import 'arc_painter.dart';
 
 enum _Element {
   background,
@@ -15,14 +14,14 @@ enum _Element {
 }
 
 final _lightTheme = {
-  _Element.background: Color(0xFF81B3FE),
-  _Element.text: Colors.white,
+  _Element.background: Colors.blue,
+  _Element.text: Colors.red,
   _Element.shadow: Colors.black,
 };
 
 final _darkTheme = {
   _Element.background: Colors.black,
-  _Element.text: Colors.white,
+  _Element.text: Colors.red,
   _Element.shadow: Color(0xFF174EA6),
 };
 
@@ -78,18 +77,18 @@ class _DigitalClockState extends State<DigitalClock> {
       _dateTime = DateTime.now();
       // Update once per minute. If you want to update every second, use the
       // following code.
-      _timer = Timer(
-        Duration(minutes: 1) -
-            Duration(seconds: _dateTime.second) -
-            Duration(milliseconds: _dateTime.millisecond),
-        _updateTime,
-      );
-      // Update once per second, but make sure to do it at the beginning of each
-      // new second, so that the clock is accurate.
       // _timer = Timer(
-      //   Duration(seconds: 1) - Duration(milliseconds: _dateTime.millisecond),
+      //   Duration(minutes: 1) -
+      //       Duration(seconds: _dateTime.second) -
+      //       Duration(milliseconds: _dateTime.millisecond),
       //   _updateTime,
       // );
+      // Update once per second, but make sure to do it at the beginning of each
+      // new second, so that the clock is accurate.
+      _timer = Timer(
+        Duration(seconds: 1) - Duration(milliseconds: _dateTime.millisecond),
+        _updateTime,
+      );
     });
   }
 
@@ -98,37 +97,49 @@ class _DigitalClockState extends State<DigitalClock> {
     final colors = Theme.of(context).brightness == Brightness.light
         ? _lightTheme
         : _darkTheme;
-    final hour =
-        DateFormat(widget.model.is24HourFormat ? 'HH' : 'hh').format(_dateTime);
-    final minute = DateFormat('mm').format(_dateTime);
-    final fontSize = MediaQuery.of(context).size.width / 3.5;
-    final offset = -fontSize / 7;
-    final defaultStyle = TextStyle(
-      color: colors[_Element.text],
-      fontFamily: 'PressStart2P',
-      fontSize: fontSize,
-      shadows: [
-        Shadow(
-          blurRadius: 0,
-          color: colors[_Element.shadow],
-          offset: Offset(10, 0),
-        ),
-      ],
-    );
+
+    
+    final hours = _dateTime.hour % 12;
+    final minutes = _dateTime.minute;
+    final seconds = _dateTime.second;
+
+    Paint paintSeconds = Paint()
+        ..color = Colors.blue
+        ..strokeCap = StrokeCap.square
+        ..style = PaintingStyle.stroke
+        ..strokeWidth = 1;
+
+    Paint paintMinutes = Paint()
+        ..color = Colors.blue
+        ..strokeCap = StrokeCap.square
+        ..style = PaintingStyle.stroke
+        ..strokeWidth = 1;
+
+    Paint paintHours = Paint()
+        ..color = Colors.blue
+        ..strokeCap = StrokeCap.square
+        ..style = PaintingStyle.stroke
+        ..strokeWidth = 1;
 
     return Container(
       color: colors[_Element.background],
-      child: Center(
-        child: DefaultTextStyle(
-          style: defaultStyle,
-          child: Stack(
-            children: <Widget>[
-              Positioned(left: offset, top: 0, child: Text(hour)),
-              Positioned(right: offset, bottom: offset, child: Text(minute)),
-            ],
+      child: Stack(
+        alignment: Alignment.center,
+        children: <Widget>[
+          CustomPaint(
+            painter: ArcPainter(0.0, hours, paintHours, 12, false, 80, 0.01)
+            
           ),
-        ),
-      ),
+          CustomPaint(
+            painter: ArcPainter(0.0, minutes, paintMinutes, 60, false, 90, 0.0003)
+            
+          ),
+          CustomPaint(
+            painter: ArcPainter(0.0, seconds, paintSeconds, 60, false, 100, 0.0003)
+            
+          ),
+        ],
+      )
     );
   }
 }
