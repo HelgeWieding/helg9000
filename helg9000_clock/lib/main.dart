@@ -9,7 +9,7 @@ import 'package:flutter_clock_helper/model.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
-import 'digital_clock.dart';
+import 'helg9000_clock.dart';
 
 void main() {
   // A temporary measure until Platform supports web and TargetPlatform supports
