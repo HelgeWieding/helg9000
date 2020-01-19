@@ -2,11 +2,11 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-import 'dart:async';
-import 'package:helg9000_clock/weather/sky/sky.dart';
+import 'package:helg9000_clock/clock/clock.dart';
+import 'package:helg9000_clock/sky/sky.dart';
 import 'package:flutter_clock_helper/model.dart';
 import 'package:flutter/material.dart';
-import 'arc_painter.dart';
+import 'package:helg9000_clock/weather/weather.dart';
 
 enum _Element {
   background,
@@ -15,8 +15,6 @@ enum _Element {
   blur,
   mode
 }
-
-
 
 final temperatureColors = [
   const Color(0xFFB50DE2), // -20 Celsius , friggin coold
@@ -67,9 +65,6 @@ final _darkTheme = {
   _Element.mode: 'dark'
 };
 
-/// A basic digital clock.
-///
-/// You can do better than this!
 class DigitalClock extends StatefulWidget {
   const DigitalClock(this.model);
 
@@ -80,14 +75,11 @@ class DigitalClock extends StatefulWidget {
 }
 
 class _DigitalClockState extends State<DigitalClock> {
-  DateTime _dateTime = DateTime.now();
-  Timer _timer;
 
   @override
   void initState() {
     super.initState();
     widget.model.addListener(_updateModel);
-    _updateTime();
     _updateModel();
   }
 
@@ -102,7 +94,6 @@ class _DigitalClockState extends State<DigitalClock> {
 
   @override
   void dispose() {
-    _timer?.cancel();
     widget.model.removeListener(_updateModel);
     widget.model.dispose();
     super.dispose();
@@ -114,31 +105,14 @@ class _DigitalClockState extends State<DigitalClock> {
     });
   }
 
-  void _updateTime() {
-    setState(() {
-      _dateTime = DateTime.now();
-
-      _timer = Timer(
-        Duration(seconds: 1) - Duration(milliseconds: _dateTime.millisecond),
-        _updateTime,
-      );
-    });
-  }
-
   @override
   Widget build(BuildContext context) {
     final colors = Theme.of(context).brightness == Brightness.light
         ? _lightTheme
         : _darkTheme;
 
-    
-    final hours = _dateTime.hour % 12;
-    final minutes = _dateTime.minute;
-    final seconds = _dateTime.second;
-
 
     // calculate temperature colors
-
     final minTemp = widget.model.temperature - 5;
     final maxTemp = widget.model.temperature + 5;
 
@@ -159,47 +133,17 @@ class _DigitalClockState extends State<DigitalClock> {
     for (var i = startIndex; i < limit; i += 1) {
       gradientColors.add(temperatureColors[i]);
     }
-    
-    
 
-    Paint paintSeconds = Paint()
-        ..strokeCap = StrokeCap.butt  
-        ..style = PaintingStyle.stroke
-        ..strokeWidth = 4.0
-        ..maskFilter = colors[_Element.blur]
-        ..isAntiAlias = true;
-
-    Paint paintMinutes = Paint()
-        ..strokeCap = StrokeCap.butt  
-        ..style = PaintingStyle.stroke
-        ..strokeWidth = 4.0
-        ..maskFilter = colors[_Element.blur]
-        ..isAntiAlias = true;
-
-    Paint paintHours = Paint()
-        ..strokeCap = StrokeCap.butt  
-        ..style = PaintingStyle.stroke
-        ..strokeWidth = 4.0
-        ..maskFilter = colors[_Element.blur]
-        ..isAntiAlias = true;
-
-    return Container(
+    return Container( 
       color: colors[_Element.background],
+      alignment: Alignment.center,
       child: Stack(
         alignment: Alignment.center,
+        fit: StackFit.expand,
         children: <Widget>[
-          CustomPaint(
-            painter: ArcPainter(hours, paintHours, 12, 120, 0.24, gradientColors)
-            
-          ),
-          CustomPaint(
-            painter: ArcPainter(minutes, paintMinutes, 60, 110, 0.03, gradientColors)
-            
-          ),
-          CustomPaint(
-            painter: ArcPainter(seconds, paintSeconds, 60, 100, 0.015, gradientColors)
-          ),
-          Sky(color: gradientColors[0], model: widget.model, mode: colors[_Element.mode])
+          Sky(color: gradientColors[0], model: widget.model, mode: colors[_Element.mode]),
+          Clock(model: widget.model, colors: gradientColors, mode: colors[_Element.mode]),
+          Weather(model: widget.model, mode: colors[_Element.mode]),
         ],
       )
     );
