@@ -39,7 +39,6 @@ class RainState extends State<Rain> with TickerProviderStateMixin {
 
     if (oldWidget.height != widget.height) {
       _createDrops();
-      _startAnimation();
     }
   }
 

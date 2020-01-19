@@ -2,6 +2,7 @@
 import 'package:flutter_clock_helper/model.dart';
 import 'package:flutter/material.dart';
 import 'package:helg9000_clock/weather/rain/rain.dart';
+import 'package:helg9000_clock/weather/snow/snow.dart';
 
 class Weather extends StatefulWidget {
   
@@ -58,7 +59,7 @@ class WeatherState extends State<Weather> with TickerProviderStateMixin {
 
     return LayoutBuilder(
             builder: (context, constraints) {       
-            return Rain(width: constraints.maxWidth / 2, height: constraints.maxHeight * 0.8);
+            return Snow(width: constraints.maxWidth / 2, height: constraints.maxHeight);
           }
         );
   }

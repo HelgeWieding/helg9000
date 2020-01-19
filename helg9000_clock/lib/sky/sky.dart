@@ -102,7 +102,7 @@ class SkyState extends State<Sky> with TickerProviderStateMixin {
       ..strokeCap = StrokeCap.butt  
       ..style = PaintingStyle.fill
       ..strokeWidth = 4.0
-      ..color = widget.color.withOpacity(1)
+      ..color = widget.color.withOpacity(0.8)
       ..maskFilter = MaskFilter.blur(BlurStyle.outer, 400)
       ..isAntiAlias = true;
 
@@ -110,7 +110,7 @@ class SkyState extends State<Sky> with TickerProviderStateMixin {
       ..strokeCap = StrokeCap.butt  
       ..style = PaintingStyle.fill
       ..strokeWidth = 4.0
-      ..color = widget.color.withOpacity(1)
+      ..color = widget.color.withOpacity(0.8)
       ..maskFilter = MaskFilter.blur(BlurStyle.inner, 200)
       ..isAntiAlias = true;
 
@@ -118,19 +118,24 @@ class SkyState extends State<Sky> with TickerProviderStateMixin {
       ..strokeCap = StrokeCap.butt  
       ..style = PaintingStyle.fill
       ..strokeWidth = 4.0
-      ..color = Colors.white.withOpacity(1)
+      ..color = Colors.white.withOpacity(0.1)
       ..maskFilter = MaskFilter.blur(BlurStyle.solid, 20)
       ..isAntiAlias = true;
     
-    return Stack(
-      alignment: Alignment.center,
-      fit: StackFit.expand,
-      children: <Widget> [
-        CustomPaint(painter: Sun(sun, 20, this._sunShine)),
-        CustomPaint(painter: Moon(sun, 20, 1 - this._sunShine)),
-        CustomPaint(painter: SkyPainter(this._radius, this._fraction, haloOuter)), 
-        CustomPaint(painter: SkyPainter(this._radius, this._fraction, haloInner)),
-      ]
+    return LayoutBuilder(
+      builder: (context, constraints) {
+        return
+          Stack(
+            alignment: Alignment.center,
+            fit: StackFit.expand,
+            children: <Widget> [
+              CustomPaint(painter: Sun(sun, constraints.maxHeight / 12, 0.2)),
+              // CustomPaint(painter: Moon(sun, constraints.maxHeight / 14, 1 - this._sunShine)),
+              CustomPaint(painter: SkyPainter(constraints.maxHeight * 0.4, this._fraction, haloOuter)), 
+              CustomPaint(painter: SkyPainter(constraints.maxHeight * 0.4, this._fraction, haloInner)),
+            ]
+          );
+      }
     );
   }
 }
