@@ -7,41 +7,38 @@ import 'package:flutter_clock_helper/model.dart';
 import 'package:flutter/material.dart';
 import 'package:helg9000_clock/clock/arc_painter.dart';
 
-
 class Clock extends StatefulWidget {
-  Clock({ this.model, this.mode, this.colors });
+  Clock({this.model, this.mode, this.colors});
 
   final ClockModel model;
   final String mode;
   final colors;
 
   final Paint paintSeconds = Paint()
-    ..strokeCap = StrokeCap.butt  
+    ..strokeCap = StrokeCap.butt
     ..style = PaintingStyle.stroke
     ..strokeWidth = 4.0
     ..isAntiAlias = true;
 
   final Paint paintMinutes = Paint()
-      ..strokeCap = StrokeCap.butt  
-      ..style = PaintingStyle.stroke
-      ..strokeWidth = 4.0
-      ..isAntiAlias = true;
+    ..strokeCap = StrokeCap.butt
+    ..style = PaintingStyle.stroke
+    ..strokeWidth = 4.0
+    ..isAntiAlias = true;
 
   final Paint paintHours = Paint()
-      ..strokeCap = StrokeCap.butt  
-      ..style = PaintingStyle.stroke
-      ..strokeWidth = 4.0
-      ..isAntiAlias = true;
+    ..strokeCap = StrokeCap.butt
+    ..style = PaintingStyle.stroke
+    ..strokeWidth = 4.0
+    ..isAntiAlias = true;
 
   @override
   _ClockState createState() => _ClockState();
 }
 
 class _ClockState extends State<Clock> {
-
   DateTime _dateTime = DateTime.now();
   Timer _timer;
-
 
   @override
   void initState() {
@@ -71,7 +68,6 @@ class _ClockState extends State<Clock> {
   void _updateModel() {
     setState(() {
       // Cause the clock to rebuild when the model changes.
-      
     });
   }
 
@@ -88,38 +84,36 @@ class _ClockState extends State<Clock> {
 
   @override
   Widget build(BuildContext context) {
-
     final hours = _dateTime.hour % 12;
     final minutes = _dateTime.minute;
     final seconds = _dateTime.second;
 
     final weather = widget.model.weatherString;
 
-    final maskFiler = weather == 'foggy' ? MaskFilter.blur(BlurStyle.normal, 2) : MaskFilter.blur(BlurStyle.solid, 2);
+    final maskFiler = weather == 'foggy'
+        ? MaskFilter.blur(BlurStyle.normal, 2)
+        : MaskFilter.blur(BlurStyle.solid, 2);
 
     widget.paintHours.maskFilter = maskFiler;
     widget.paintMinutes.maskFilter = maskFiler;
     widget.paintSeconds.maskFilter = maskFiler;
 
-    return 
-    LayoutBuilder(
-        builder: (context, constraints) {       
-        return Stack(
-            alignment: Alignment.center,
-            fit: StackFit.expand,
-            children: <Widget>[
-              CustomPaint(
-                painter: ArcPainter(hours, widget.paintHours, 12, constraints.maxHeight * 0.45, 0.24, widget.colors)
-              ),
-              CustomPaint(
-                painter: ArcPainter(minutes, widget.paintMinutes, 60, constraints.maxHeight * 0.4, 0.03, widget.colors)
-              ),
-              CustomPaint(
-                painter: ArcPainter(seconds, widget.paintSeconds, 60, constraints.maxHeight * 0.35, 0.015, widget.colors)
-              ),
-            ],
-        );
-      }
-    );
+    return LayoutBuilder(builder: (context, constraints) {
+      return Stack(
+        alignment: Alignment.center,
+        fit: StackFit.expand,
+        children: <Widget>[
+          CustomPaint(
+              painter: ArcPainter(hours, widget.paintHours, 12,
+                  constraints.maxHeight * 0.45, 0.24, widget.colors)),
+          CustomPaint(
+              painter: ArcPainter(minutes, widget.paintMinutes, 60,
+                  constraints.maxHeight * 0.4, 0.03, widget.colors)),
+          CustomPaint(
+              painter: ArcPainter(seconds, widget.paintSeconds, 60,
+                  constraints.maxHeight * 0.35, 0.015, widget.colors)),
+        ],
+      );
+    });
   }
 }

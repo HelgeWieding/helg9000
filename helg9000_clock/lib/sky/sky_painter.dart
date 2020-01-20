@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 
 class SkyPainter extends CustomPainter {
-
   Paint _paint;
 
   Offset center;
@@ -22,7 +21,6 @@ class SkyPainter extends CustomPainter {
     this._paint.color = this._color.withOpacity(this._fraction);
 
     canvas.drawCircle(center, this._radius, this._paint);
-    
   }
 
   @override

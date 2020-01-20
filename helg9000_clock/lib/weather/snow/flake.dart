@@ -1,5 +1,4 @@
 class Flake {
-
   double x;
   double y;
   double radius;

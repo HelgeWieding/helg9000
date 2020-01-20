@@ -1,21 +1,15 @@
 import 'package:flutter/material.dart';
 
 class Sun extends CustomPainter {
-
-  Sun({
-    @required this.fraction,
-    @required this.paintSun,
-    @required this.radius
-  }
-    
-
-  );
+  Sun(
+      {@required this.fraction,
+      @required this.paintSun,
+      @required this.radius});
   Paint paintSun;
 
   Offset center;
   double radius;
   double fraction;
-
 
   @override
   void paint(Canvas canvas, Size size) {

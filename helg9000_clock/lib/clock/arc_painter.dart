@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'dart:math';
 
 class ArcPainter extends CustomPainter {
-
   int _progress;
   Paint _paint;
   int _units;
@@ -14,8 +13,6 @@ class ArcPainter extends CustomPainter {
   double _radius;
 
   Paint paintMarkerEmpty;
-
-  
 
   ArcPainter(
     this._progress,
@@ -34,7 +31,6 @@ class ArcPainter extends CustomPainter {
 
   @override
   void paint(Canvas canvas, Size size) {
-
     center = Offset(size.width / 2, size.height / 2);
     var rect = Rect.fromCircle(center: center, radius: this._radius);
 
@@ -50,10 +46,11 @@ class ArcPainter extends CustomPainter {
     this.paintMarkerEmpty.color = this._gradient[0].withOpacity(0.2);
 
     // draw dial
-    for(var i = 0 ; i < this._units; i++) { 
+    for (var i = 0; i < this._units; i++) {
       final double start = ((2 * pi) / this._units * i);
-      canvas.drawArc(rect, -pi / 2 + start, this._gap * 2, false, i < this._progress ? this._paint : paintMarkerEmpty);
-    } 
+      canvas.drawArc(rect, -pi / 2 + start, this._gap * 2, false,
+          i < this._progress ? this._paint : paintMarkerEmpty);
+    }
   }
 
   @override

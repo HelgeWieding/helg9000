@@ -8,13 +8,7 @@ import 'package:flutter_clock_helper/model.dart';
 import 'package:flutter/material.dart';
 import 'package:helg9000_clock/weather/weather.dart';
 
-enum _Element {
-  background,
-  text,
-  shadow,
-  blur,
-  mode
-}
+enum _Element { background, text, shadow, blur, mode }
 
 final temperatureColors = [
   const Color(0xFFB50DE2), // -20 Celsius , friggin coold
@@ -75,7 +69,6 @@ class DigitalClock extends StatefulWidget {
 }
 
 class _DigitalClockState extends State<DigitalClock> {
-
   @override
   void initState() {
     super.initState();
@@ -111,16 +104,18 @@ class _DigitalClockState extends State<DigitalClock> {
         ? _lightTheme
         : _darkTheme;
 
-
     // calculate temperature colors
     final minTemp = widget.model.temperature - 5;
     final maxTemp = widget.model.temperature + 5;
 
-    var startIndex = ((minTemp + 20) / 2).floor() > 0 ? ((minTemp + 20) / 2).floor() : 0;
-    var limit = ((maxTemp + 20) / 2).floor() <= temperatureColors.length ? ((maxTemp + 20) / 2).floor() : temperatureColors.length;
-    
+    var startIndex =
+        ((minTemp + 20) / 2).floor() > 0 ? ((minTemp + 20) / 2).floor() : 0;
+    var limit = ((maxTemp + 20) / 2).floor() <= temperatureColors.length
+        ? ((maxTemp + 20) / 2).floor()
+        : temperatureColors.length;
+
     List<Color> gradientColors = List();
-    
+
     // we need at least 2 colors for the gradient
     if (startIndex > temperatureColors.length) {
       startIndex = temperatureColors.length - 2;
@@ -134,18 +129,23 @@ class _DigitalClockState extends State<DigitalClock> {
       gradientColors.add(temperatureColors[i]);
     }
 
-    return Container( 
-      color: colors[_Element.background],
-      alignment: Alignment.center,
-      child: Stack(
+    return Container(
+        color: colors[_Element.background],
         alignment: Alignment.center,
-        fit: StackFit.expand,
-        children: <Widget>[
-          Sky(color: gradientColors[0], model: widget.model, mode: colors[_Element.mode]),
-          Clock(model: widget.model, colors: gradientColors, mode: colors[_Element.mode]),
-          Weather(model: widget.model, mode: colors[_Element.mode]),
-        ],
-      )
-    );
+        child: Stack(
+          alignment: Alignment.center,
+          fit: StackFit.expand,
+          children: <Widget>[
+            Sky(
+                color: gradientColors[0],
+                model: widget.model,
+                mode: colors[_Element.mode]),
+            Clock(
+                model: widget.model,
+                colors: gradientColors,
+                mode: colors[_Element.mode]),
+            Weather(model: widget.model, mode: colors[_Element.mode]),
+          ],
+        ));
   }
 }

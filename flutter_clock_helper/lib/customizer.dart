@@ -13,7 +13,7 @@ import 'model.dart';
 ///
 /// Contestants: Do not edit this.
 typedef Widget ClockBuilder(ClockModel model);
-  
+
 /// Wrapper for clock widget to allow for customizations.
 ///
 /// Puts the clock in landscape orientation with an aspect ratio of 5:3.

@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 
 class CloudPainter extends CustomPainter {
-
   double x;
   double y;
   double radius;
@@ -9,9 +8,9 @@ class CloudPainter extends CustomPainter {
   double opacity;
 
   Paint cloudPainter = Paint()
-                        ..color = Colors.black
-                        ..maskFilter = MaskFilter.blur(BlurStyle.solid, 2)
-                        ..style = PaintingStyle.fill;
+    ..color = Colors.black
+    ..maskFilter = MaskFilter.blur(BlurStyle.solid, 2)
+    ..style = PaintingStyle.fill;
 
   CloudPainter(
     this.x,
@@ -19,14 +18,14 @@ class CloudPainter extends CustomPainter {
     this.radius,
     this.speed,
     this.opacity,
-  ) {
-    
-  }
+  ) {}
 
   @override
   void paint(Canvas canvas, Size size) {
-    this.cloudPainter.color = this.cloudPainter.color.withOpacity(this.opacity / 2);
-    var rect = Rect.fromCircle(center: Offset(this.x, this.y), radius: this.radius / 2);
+    this.cloudPainter.color =
+        this.cloudPainter.color.withOpacity(this.opacity / 2);
+    var rect = Rect.fromCircle(
+        center: Offset(this.x, this.y), radius: this.radius / 2);
     canvas.drawOval(rect, this.cloudPainter);
   }
 

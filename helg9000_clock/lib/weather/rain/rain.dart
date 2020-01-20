@@ -3,10 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:helg9000_clock/weather/rain/drop.dart';
 import 'package:helg9000_clock/weather/rain/drop_painter.dart';
 
-
 class Rain extends StatefulWidget {
-
-  
   final double width;
   final double height;
   final Orientation orientation;
@@ -14,11 +11,10 @@ class Rain extends StatefulWidget {
   @override
   State<StatefulWidget> createState() => RainState();
 
-  const Rain({ this.width, this.height, this.orientation });
+  const Rain({this.width, this.height, this.orientation});
 }
 
 class RainState extends State<Rain> with TickerProviderStateMixin {
-
   var _dropPainters = <Widget>[];
   var _drops = <Drop>[];
   AnimationController rainAnimationController;
@@ -28,7 +24,6 @@ class RainState extends State<Rain> with TickerProviderStateMixin {
     _createDrops();
     _startAnimation();
     super.initState();
-    
   }
 
   @override
@@ -57,9 +52,14 @@ class RainState extends State<Rain> with TickerProviderStateMixin {
     this._drops = [];
     var rng = new Random();
     for (var i = 0; i < 200; i += 1) {
-      final drop = Drop(rng.nextDouble() * widget.width + widget.width / 2, rng.nextDouble() * widget.height, rng.nextDouble() * 20, rng.nextDouble() * 10 + 10,
-      rng.nextDouble() * 0.6);
-      var painter = CustomPaint(painter: DropPainter(drop.x, drop.y, drop.length, 2, drop.opacity));
+      final drop = Drop(
+          rng.nextDouble() * widget.width + widget.width / 2,
+          rng.nextDouble() * widget.height,
+          rng.nextDouble() * 20,
+          rng.nextDouble() * 10 + 10,
+          rng.nextDouble() * 0.6);
+      var painter = CustomPaint(
+          painter: DropPainter(drop.x, drop.y, drop.length, 2, drop.opacity));
       this._drops.add(drop);
       this._dropPainters.add(painter);
     }
@@ -67,7 +67,8 @@ class RainState extends State<Rain> with TickerProviderStateMixin {
 
   _startAnimation() {
     print('starting rain animation');
-    this.rainAnimationController = AnimationController(duration: Duration(milliseconds: 15000), vsync: this);
+    this.rainAnimationController = AnimationController(
+        duration: Duration(milliseconds: 15000), vsync: this);
     Tween(begin: 0.0, end: 1.0).animate(this.rainAnimationController)
       ..addListener(() {
         setState(() {
@@ -79,21 +80,21 @@ class RainState extends State<Rain> with TickerProviderStateMixin {
               drop.y = 0;
             }
 
-            var painter = CustomPaint(painter: DropPainter(drop.x, drop.y, drop.length, 2, drop.opacity));
+            var painter = CustomPaint(
+                painter:
+                    DropPainter(drop.x, drop.y, drop.length, 2, drop.opacity));
             this._dropPainters.add(painter);
-          }); 
+          });
         });
       });
-      this.rainAnimationController.repeat();
+    this.rainAnimationController.repeat();
   }
 
-
-  @override 
+  @override
   Widget build(BuildContext context) {
     return Stack(
-      alignment: Alignment.center,
-      fit: StackFit.expand,
-      children: this._dropPainters
-    );
+        alignment: Alignment.center,
+        fit: StackFit.expand,
+        children: this._dropPainters);
   }
 }

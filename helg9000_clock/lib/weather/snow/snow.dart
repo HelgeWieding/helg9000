@@ -4,11 +4,7 @@ import 'package:helg9000_clock/weather/rain/drop_painter.dart';
 import 'package:helg9000_clock/weather/snow/flake.dart';
 import 'package:helg9000_clock/weather/snow/flake_painter.dart';
 
-
-
 class Snow extends StatefulWidget {
-
-  
   final double width;
   final double height;
   final Orientation orientation;
@@ -16,11 +12,10 @@ class Snow extends StatefulWidget {
   @override
   State<StatefulWidget> createState() => SnowState();
 
-  const Snow({ this.width, this.height, this.orientation });
+  const Snow({this.width, this.height, this.orientation});
 }
 
 class SnowState extends State<Snow> with TickerProviderStateMixin {
-
   var _snowPainters = <Widget>[];
   var _flakes = <Flake>[];
   AnimationController snowAnimationController;
@@ -40,13 +35,12 @@ class SnowState extends State<Snow> with TickerProviderStateMixin {
       _createFlakes();
       _startAnimation();
     }
-    
+
     if (oldWidget.height != widget.height) {
       this.snowAnimationController.dispose();
       _createFlakes();
       _startAnimation();
     }
-    
   }
 
   @override
@@ -59,17 +53,22 @@ class SnowState extends State<Snow> with TickerProviderStateMixin {
     this._flakes = [];
     var rng = new Random();
     for (var i = 0; i < 200; i += 1) {
-      final drop = Flake((rng.nextDouble() * widget.width) + widget.width / 2, rng.nextDouble() * widget.height + widget.height / 20, rng.nextDouble() * (widget.height / 20), rng.nextDouble() + (widget.height / 100), 
-      rng.nextDouble() * 0.6);
-      var painter = CustomPaint(painter: DropPainter(drop.x, drop.y, 2, drop.opacity, 0.0));
+      final drop = Flake(
+          (rng.nextDouble() * widget.width) + widget.width / 2,
+          rng.nextDouble() * widget.height + widget.height / 20,
+          rng.nextDouble() * (widget.height / 20),
+          rng.nextDouble() + (widget.height / 100),
+          rng.nextDouble() * 0.6);
+      var painter = CustomPaint(
+          painter: DropPainter(drop.x, drop.y, 2, drop.opacity, 0.0));
       this._flakes.add(drop);
       this._snowPainters.add(painter);
     }
   }
 
   _startAnimation() {
-
-    this.snowAnimationController = AnimationController(duration: Duration(milliseconds: 2000), vsync: this);
+    this.snowAnimationController = AnimationController(
+        duration: Duration(milliseconds: 2000), vsync: this);
     var rng = new Random();
     Tween(begin: 0.0, end: 1.0).animate(this.snowAnimationController)
       ..addListener(() {
@@ -84,21 +83,21 @@ class SnowState extends State<Snow> with TickerProviderStateMixin {
               flake.x = rng.nextDouble() * widget.width + widget.width / 2;
             }
 
-            var painter = CustomPaint(painter: FlakePainter(flake.x, flake.y, flake.radius, flake.speed, flake.opacity));
+            var painter = CustomPaint(
+                painter: FlakePainter(flake.x, flake.y, flake.radius,
+                    flake.speed, flake.opacity));
             this._snowPainters.add(painter);
-          }); 
+          });
         });
       });
-      this.snowAnimationController.repeat();
+    this.snowAnimationController.repeat();
   }
 
-
-  @override 
+  @override
   Widget build(BuildContext context) {
     return Stack(
-      alignment: Alignment.center,
-      fit: StackFit.expand,
-      children: this._snowPainters
-    );
+        alignment: Alignment.center,
+        fit: StackFit.expand,
+        children: this._snowPainters);
   }
 }
