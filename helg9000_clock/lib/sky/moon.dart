@@ -37,7 +37,7 @@ class Moon extends CustomPainter {
   }
 
   @override
-  bool shouldRepaint(CustomPainter oldDelegate) {
-    return true;
+  bool shouldRepaint(Moon oldDelegate) {
+    return oldDelegate.fraction != fraction;
   }
 }

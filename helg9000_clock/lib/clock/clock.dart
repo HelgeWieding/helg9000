@@ -75,26 +75,26 @@ class _ClockState extends State<Clock> {
     final seconds = _dateTime.second;
     // calculate temperature colors
 
-    final minTemp = widget.model.temperature - 5;
-    final maxTemp = widget.model.temperature + 5;
+    // final minTemp = widget.model.temperature - 5;
+    // final maxTemp = widget.model.temperature + 5;
 
-    var startIndex = ((minTemp + 20) / 2).floor() > 0 ? ((minTemp + 20) / 2).floor() : 0;
-    var limit = ((maxTemp + 20) / 2).floor() <= widget.colors.length ? ((maxTemp + 20) / 2).floor() : widget.colors.length;
+    // var startIndex = ((minTemp + 20) / 2).floor() > 0 ? ((minTemp + 20) / 2).floor() : 0;
+    // var limit = ((maxTemp + 20) / 2).floor() <= widget.colors.length ? ((maxTemp + 20) / 2).floor() : widget.colors.length;
     
-    List<Color> gradientColors = List();
+    // List<Color> gradientColors = List();
     
-    // we need at least 2 colors for the gradient
-    if (startIndex > widget.colors.length) {
-      startIndex = widget.colors.length - 2;
-    }
+    // // we need at least 2 colors for the gradient
+    // if (startIndex > widget.colors.length) {
+    //   startIndex = widget.colors.length - 2;
+    // }
 
-    if (limit < 0) {
-      limit = 2;
-    }
+    // if (limit < 0) {
+    //   limit = 2;
+    // }
     
-    for (var i = startIndex; i < limit; i += 1) {
-      gradientColors.add(widget.colors[i]);
-    }
+    // for (var i = startIndex; i < limit; i += 1) {
+    //   gradientColors.add(widget.colors[i]);
+    // }
     
     final maskFilter = widget.mode == 'light' ? MaskFilter.blur(BlurStyle.normal, 0) : MaskFilter.blur(BlurStyle.solid, 2);
     
@@ -128,13 +128,13 @@ class _ClockState extends State<Clock> {
             fit: StackFit.expand,
             children: <Widget>[
               CustomPaint(
-                painter: ArcPainter(hours, paintHours, 12, constraints.maxHeight * 0.45, 0.24, gradientColors)
+                painter: ArcPainter(hours, paintHours, 12, constraints.maxHeight * 0.45, 0.24, widget.colors)
               ),
               CustomPaint(
-                painter: ArcPainter(minutes, paintMinutes, 60, constraints.maxHeight * 0.4, 0.03, gradientColors)
+                painter: ArcPainter(minutes, paintMinutes, 60, constraints.maxHeight * 0.4, 0.03, widget.colors)
               ),
               CustomPaint(
-                painter: ArcPainter(seconds, paintSeconds, 60, constraints.maxHeight * 0.35, 0.015, gradientColors)
+                painter: ArcPainter(seconds, paintSeconds, 60, constraints.maxHeight * 0.35, 0.015, widget.colors)
               ),
             ],
         );

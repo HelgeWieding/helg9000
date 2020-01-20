@@ -13,6 +13,10 @@ class ArcPainter extends CustomPainter {
   Offset center;
   double _radius;
 
+  Paint paintMarkerEmpty;
+
+  
+
   ArcPainter(
     this._progress,
     this._paint,
@@ -20,7 +24,13 @@ class ArcPainter extends CustomPainter {
     this._radius,
     this._gap,
     this._gradient,
-  );
+  ) {
+    this.paintMarkerEmpty = Paint()
+      ..strokeCap = StrokeCap.butt
+      ..style = PaintingStyle.stroke
+      ..strokeWidth = this._paint.strokeWidth
+      ..isAntiAlias = true;
+  }
 
   @override
   void paint(Canvas canvas, Size size) {
@@ -37,12 +47,9 @@ class ArcPainter extends CustomPainter {
 
     this._paint.shader = gradient2.createShader(rect);
 
-    Paint paintMarkerEmpty = Paint()
-      ..color = this._gradient[0].withOpacity(0.2)
-      ..strokeCap = StrokeCap.butt
-      ..style = PaintingStyle.stroke
-      ..strokeWidth = this._paint.strokeWidth
-      ..isAntiAlias = true;
+    this.paintMarkerEmpty.color = this._gradient[0].withOpacity(0.2);
+
+    this._paint.maskFilter = MaskFilter.blur(BlurStyle.solid, 20);
 
     // draw dial
     for(var i = 0 ; i < this._units; i++) { 

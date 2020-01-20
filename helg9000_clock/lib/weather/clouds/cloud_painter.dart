@@ -25,7 +25,6 @@ class CloudPainter extends CustomPainter {
 
   @override
   void paint(Canvas canvas, Size size) {
-    // canvas.drawLine(Offset(this.x, this.y), Offset(this.x, this.y + this.length), Paint()..color = Colors.black.withOpacity(this.opacity)..strokeWidth = 3.0..strokeCap = StrokeCap.round);
     this.cloudPainter.color = this.cloudPainter.color.withOpacity(this.opacity / 2);
     var rect = Rect.fromCircle(center: Offset(this.x, this.y), radius: this.radius / 2);
     canvas.drawOval(rect, this.cloudPainter);

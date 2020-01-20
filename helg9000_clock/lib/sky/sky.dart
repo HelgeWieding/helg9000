@@ -19,16 +19,43 @@ class Sky extends StatefulWidget {
 
 class SkyState extends State<Sky> with TickerProviderStateMixin {
 
-  double _fraction = 0.0;
-  double _radius = 90;
-  double _sunShine =  0.8;
+  double _brightness = 0.33;
+  double _sunShine =  1.0;
+  double _moonShine =  0.0;
+
+  Paint haloOuter = Paint()  
+      ..strokeCap = StrokeCap.butt  
+      ..style = PaintingStyle.fill
+      ..strokeWidth = 4.0
+      ..maskFilter = MaskFilter.blur(BlurStyle.outer, 400)
+      ..isAntiAlias = true;
+
+  Paint haloInner = Paint()  
+      ..strokeCap = StrokeCap.butt  
+      ..style = PaintingStyle.fill
+      ..strokeWidth = 4.0
+      ..maskFilter = MaskFilter.blur(BlurStyle.inner, 200)
+      ..isAntiAlias = true;
+
+  Paint sun = Paint()  
+      ..strokeCap = StrokeCap.butt  
+      ..style = PaintingStyle.fill
+      ..strokeWidth = 4.0
+      ..maskFilter = MaskFilter.blur(BlurStyle.solid, 20)
+      ..isAntiAlias = true;
+
+  Paint moon = Paint()  
+    ..strokeCap = StrokeCap.butt  
+    ..style = PaintingStyle.fill
+    ..strokeWidth = 4.0
+    ..maskFilter = MaskFilter.blur(BlurStyle.solid, 20)
+    ..isAntiAlias = true;
 
   Animation<double> animation;
 
   @override
   void initState() {
     super.initState();
-    _updateColor();
   }
 
   @override
@@ -41,37 +68,64 @@ class SkyState extends State<Sky> with TickerProviderStateMixin {
     super.didUpdateWidget(oldWidget);
 
     if (widget.mode != oldWidget.mode) {
-      _updateColor();
+      // _switchBrightness();
     }
 
-    if (widget.model != oldWidget.model) {
-      oldWidget.model.removeListener(_updateSky());
-      widget.model.addListener(_updateSky());
-    }
+    switch(widget.model.weatherString) { 
+        case 'cloudy': {
+            this.setCloudy(this._brightness, 1, 2000);
+        } 
+        break; 
+        
+        case 'sunny': { 
+            //statements; 
+            this.setSunny(this._sunShine, 1, 2000);
+        } 
+        break; 
+
+        case 'rainy': { 
+            //statements; 
+            this.setCloudy(this._brightness, 1, 2000);
+        } 
+        break; 
+            
+        default: { 
+            //statements;  
+        }
+        break; 
+      }
   }
 
   @override
   void dispose() {
-    widget.model.removeListener(_updateSky());
     widget.model.dispose();
     super.dispose();
   }
 
-  _updateSky() {
-    // to be implemented
+  void setSunny(double from, double to, int duration) {
+    var controller = AnimationController(duration: Duration(milliseconds: duration), vsync: this);
+    animation = Tween(begin: from, end: to).animate(controller)
+      ..addListener(() {
+          setState(() {
+            this._sunShine = animation.value;
+            this._moonShine = 0;
+            this._brightness = animation.value / 3;
+          });
+        });
+    controller.forward();
   }
 
-  void _updateColor() {
-
-    var controller = AnimationController(duration: Duration(milliseconds: 2000), vsync: this);
-    animation = Tween(begin: 0.0, end: 1.0).animate(controller)
+  void setCloudy(double from, double to, int duration) {
+    var controller = AnimationController(duration: Duration(milliseconds: duration), vsync: this);
+    animation = Tween(begin: from, end: to).animate(controller)
       ..addListener(() {
-        setState(() {
-          _fraction = getSkyOpacity(animation.value);
-          _sunShine = widget.mode == 'light' ? animation.value : 1 - animation.value;
+          setState(() {
+            this._sunShine = 1 - animation.value;
+            this._moonShine = 0;
+            this._brightness = animation.value;
+          });
         });
-      });
-      controller.forward();
+    controller.forward();
   }
 
   getSkyOpacity(double animationValue) {
@@ -87,8 +141,8 @@ class SkyState extends State<Sky> with TickerProviderStateMixin {
       val = 0.2;
     }
  
-    if (val > 0.8) {
-      val = 0.8;
+    if (val > 0.5) {
+      val = 0.5;
     }
 
     return val;
@@ -97,30 +151,6 @@ class SkyState extends State<Sky> with TickerProviderStateMixin {
 
   @override
   Widget build(BuildContext context) {
-    // print('building sky $context');
-    Paint haloOuter = Paint()  
-      ..strokeCap = StrokeCap.butt  
-      ..style = PaintingStyle.fill
-      ..strokeWidth = 4.0
-      ..color = widget.color.withOpacity(0.8)
-      ..maskFilter = MaskFilter.blur(BlurStyle.outer, 400)
-      ..isAntiAlias = true;
-
-    Paint haloInner = Paint()  
-      ..strokeCap = StrokeCap.butt  
-      ..style = PaintingStyle.fill
-      ..strokeWidth = 4.0
-      ..color = widget.color.withOpacity(0.8)
-      ..maskFilter = MaskFilter.blur(BlurStyle.inner, 200)
-      ..isAntiAlias = true;
-
-    Paint sun = Paint()  
-      ..strokeCap = StrokeCap.butt  
-      ..style = PaintingStyle.fill
-      ..strokeWidth = 4.0
-      ..color = Colors.white.withOpacity(0.1)
-      ..maskFilter = MaskFilter.blur(BlurStyle.solid, 20)
-      ..isAntiAlias = true;
     
     return LayoutBuilder(
       builder: (context, constraints) {
@@ -129,10 +159,10 @@ class SkyState extends State<Sky> with TickerProviderStateMixin {
             alignment: Alignment.center,
             fit: StackFit.expand,
             children: <Widget> [
-              CustomPaint(painter: Sun(sun, constraints.maxHeight / 12, 0.2)),
-              // CustomPaint(painter: Moon(sun, constraints.maxHeight / 14, 1 - this._sunShine)),
-              CustomPaint(painter: SkyPainter(constraints.maxHeight * 0.4, this._fraction, haloOuter)), 
-              CustomPaint(painter: SkyPainter(constraints.maxHeight * 0.4, this._fraction, haloInner)),
+              CustomPaint(painter: Sun(paintSun: sun, radius: constraints.maxHeight / 12, fraction: this._sunShine)),
+              CustomPaint(painter: Moon(moon, constraints.maxHeight / 14, this._moonShine)),
+              CustomPaint(painter: SkyPainter(constraints.maxHeight * 0.4, this._brightness, widget.color, haloOuter)), 
+              CustomPaint(painter: SkyPainter(constraints.maxHeight * 0.4, this._brightness, widget.color, haloInner)),
             ]
           );
       }

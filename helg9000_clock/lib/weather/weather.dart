@@ -17,6 +17,8 @@ class Weather extends StatefulWidget {
 
 class WeatherState extends State<Weather> with TickerProviderStateMixin {
 
+  Widget weather;
+
   @override
   void initState() {
     super.initState();
@@ -31,15 +33,13 @@ class WeatherState extends State<Weather> with TickerProviderStateMixin {
   @override
   void didUpdateWidget(Weather oldWidget) {
     super.didUpdateWidget(oldWidget);
-
-    if (widget.mode != oldWidget.mode) {
-      _updateWeather();
-    }
-
+    
     if (widget.model != oldWidget.model) {
       oldWidget.model.removeListener(_updateWeather());
       widget.model.addListener(_updateWeather());
     }
+
+    print(widget.model.weatherString);
   }
 
   @override
@@ -50,7 +50,7 @@ class WeatherState extends State<Weather> with TickerProviderStateMixin {
   }
 
   _updateWeather() {
-
+    
   }
 
 
@@ -59,7 +59,16 @@ class WeatherState extends State<Weather> with TickerProviderStateMixin {
 
     return LayoutBuilder(
             builder: (context, constraints) {       
-            return Snow(width: constraints.maxWidth / 2, height: constraints.maxHeight);
+
+            if (widget.model.weatherString =='rainy' || widget.model.weatherString == 'thunderstorm') {
+              this.weather = Rain(width: constraints.maxWidth / 2, height: constraints.maxHeight * 0.9);
+            } else if (widget.model.weatherString == 'snowy') {
+              this.weather = Snow(width: constraints.maxWidth / 2, height: constraints.maxHeight * 0.9);
+            } else {
+              this.weather = Container();
+            }
+
+            return this.weather;
           }
         );
   }

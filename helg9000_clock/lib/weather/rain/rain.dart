@@ -21,10 +21,12 @@ class RainState extends State<Rain> with TickerProviderStateMixin {
 
   var _dropPainters = <Widget>[];
   var _drops = <Drop>[];
-  Animation<double> _animation;
+  AnimationController rainAnimationController;
 
   @override
   void initState() {
+    _createDrops();
+    _startAnimation();
     super.initState();
     
   }
@@ -32,27 +34,30 @@ class RainState extends State<Rain> with TickerProviderStateMixin {
   @override
   void didUpdateWidget(Rain oldWidget) {
     super.didUpdateWidget(oldWidget);
+
     if (this._drops.length == 0) {
       _createDrops();
       _startAnimation();
     }
 
     if (oldWidget.height != widget.height) {
+      this.rainAnimationController.dispose();
       _createDrops();
+      _startAnimation();
     }
   }
 
   @override
   void dispose() {
+    this.rainAnimationController.dispose();
     super.dispose();
   }
 
   _createDrops() {
-    print('creating drops');
     this._drops = [];
     var rng = new Random();
     for (var i = 0; i < 200; i += 1) {
-      final drop = Drop(rng.nextDouble() * widget.width + widget.width / 2, rng.nextDouble() * widget.height, rng.nextDouble() * 20, rng.nextDouble() * 2 + 5, 
+      final drop = Drop(rng.nextDouble() * widget.width + widget.width / 2, rng.nextDouble() * widget.height, rng.nextDouble() * 20, rng.nextDouble() * 10 + 5, 
       rng.nextDouble() * 0.6);
       var painter = CustomPaint(painter: DropPainter(drop.x, drop.y, drop.length, 2, drop.opacity));
       this._drops.add(drop);
@@ -61,8 +66,9 @@ class RainState extends State<Rain> with TickerProviderStateMixin {
   }
 
   _startAnimation() {
-    var controller = AnimationController(duration: Duration(milliseconds: 15000), vsync: this);
-    this._animation = Tween(begin: 0.0, end: 1.0).animate(controller)
+    print('starting rain animation');
+    this.rainAnimationController = AnimationController(duration: Duration(milliseconds: 15000), vsync: this);
+    Tween(begin: 0.0, end: 1.0).animate(this.rainAnimationController)
       ..addListener(() {
         setState(() {
           this._dropPainters = [];
@@ -78,7 +84,7 @@ class RainState extends State<Rain> with TickerProviderStateMixin {
           }); 
         });
       });
-      controller.repeat();
+      this.rainAnimationController.repeat();
   }
 
 
