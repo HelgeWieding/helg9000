@@ -49,8 +49,6 @@ class ArcPainter extends CustomPainter {
 
     this.paintMarkerEmpty.color = this._gradient[0].withOpacity(0.2);
 
-    this._paint.maskFilter = MaskFilter.blur(BlurStyle.solid, 20);
-
     // draw dial
     for(var i = 0 ; i < this._units; i++) { 
       final double start = ((2 * pi) / this._units * i);

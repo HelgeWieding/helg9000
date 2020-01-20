@@ -56,6 +56,7 @@ class SkyState extends State<Sky> with TickerProviderStateMixin {
   @override
   void initState() {
     super.initState();
+    widget.model.addListener(_updateWeather);
   }
 
   @override
@@ -67,9 +68,15 @@ class SkyState extends State<Sky> with TickerProviderStateMixin {
   void didUpdateWidget(Sky oldWidget) {
     super.didUpdateWidget(oldWidget);
 
-    if (widget.mode != oldWidget.mode) {
-      // _switchBrightness();
+    if (widget.model != oldWidget.model) {
+      oldWidget.model.removeListener(_updateWeather());
+      widget.model.addListener(_updateWeather());
     }
+  }
+
+  _updateWeather() {
+
+    print('updating weather');
 
     switch(widget.model.weatherString) { 
         case 'cloudy': {
@@ -79,11 +86,23 @@ class SkyState extends State<Sky> with TickerProviderStateMixin {
         
         case 'sunny': { 
             //statements; 
-            this.setSunny(this._sunShine, 1, 2000);
+            this.setSunny(this._sunShine, 1, 0.3, 2000);
         } 
         break; 
 
         case 'rainy': { 
+            //statements; 
+            this.setCloudy(this._brightness, 1, 2000);
+        } 
+        break;
+
+        case 'foggy': { 
+            //statements; 
+            this.setCloudy(this._brightness, 1, 2000);
+        } 
+        break; 
+
+        case 'snowy': { 
             //statements; 
             this.setCloudy(this._brightness, 1, 2000);
         } 
@@ -99,17 +118,26 @@ class SkyState extends State<Sky> with TickerProviderStateMixin {
   @override
   void dispose() {
     widget.model.dispose();
+    widget.model.removeListener(_updateWeather);
     super.dispose();
   }
 
-  void setSunny(double from, double to, int duration) {
+  void setSunny(double sunTo, double moonTo, double brightnessTo, int duration) {
+
+    bool brightnessDown = brightnessTo < this._brightness;
+
     var controller = AnimationController(duration: Duration(milliseconds: duration), vsync: this);
-    animation = Tween(begin: from, end: to).animate(controller)
+    animation = Tween(begin: 0.0, end: 1.0).animate(controller)
       ..addListener(() {
           setState(() {
             this._sunShine = animation.value;
             this._moonShine = 0;
-            this._brightness = animation.value / 3;
+
+            if (this._brightness > brightnessTo && brightnessDown) {
+              this._brightness = 1 - animation.value;
+            } else if (this._brightness < brightnessTo && !brightnessDown) {
+              this._brightness =  animation.value;
+            }
           });
         });
     controller.forward();

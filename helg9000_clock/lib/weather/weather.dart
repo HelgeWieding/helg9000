@@ -38,8 +38,6 @@ class WeatherState extends State<Weather> with TickerProviderStateMixin {
       oldWidget.model.removeListener(_updateWeather());
       widget.model.addListener(_updateWeather());
     }
-
-    print(widget.model.weatherString);
   }
 
   @override

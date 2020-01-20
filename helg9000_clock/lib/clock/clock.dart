@@ -9,11 +9,29 @@ import 'package:helg9000_clock/clock/arc_painter.dart';
 
 
 class Clock extends StatefulWidget {
-  const Clock({ this.model, this.mode, this.colors });
+  Clock({ this.model, this.mode, this.colors });
 
   final ClockModel model;
   final String mode;
   final colors;
+
+  final Paint paintSeconds = Paint()
+    ..strokeCap = StrokeCap.butt  
+    ..style = PaintingStyle.stroke
+    ..strokeWidth = 4.0
+    ..isAntiAlias = true;
+
+  final Paint paintMinutes = Paint()
+      ..strokeCap = StrokeCap.butt  
+      ..style = PaintingStyle.stroke
+      ..strokeWidth = 4.0
+      ..isAntiAlias = true;
+
+  final Paint paintHours = Paint()
+      ..strokeCap = StrokeCap.butt  
+      ..style = PaintingStyle.stroke
+      ..strokeWidth = 4.0
+      ..isAntiAlias = true;
 
   @override
   _ClockState createState() => _ClockState();
@@ -53,6 +71,7 @@ class _ClockState extends State<Clock> {
   void _updateModel() {
     setState(() {
       // Cause the clock to rebuild when the model changes.
+      
     });
   }
 
@@ -73,52 +92,14 @@ class _ClockState extends State<Clock> {
     final hours = _dateTime.hour % 12;
     final minutes = _dateTime.minute;
     final seconds = _dateTime.second;
-    // calculate temperature colors
 
-    // final minTemp = widget.model.temperature - 5;
-    // final maxTemp = widget.model.temperature + 5;
+    final weather = widget.model.weatherString;
 
-    // var startIndex = ((minTemp + 20) / 2).floor() > 0 ? ((minTemp + 20) / 2).floor() : 0;
-    // var limit = ((maxTemp + 20) / 2).floor() <= widget.colors.length ? ((maxTemp + 20) / 2).floor() : widget.colors.length;
-    
-    // List<Color> gradientColors = List();
-    
-    // // we need at least 2 colors for the gradient
-    // if (startIndex > widget.colors.length) {
-    //   startIndex = widget.colors.length - 2;
-    // }
+    final maskFiler = weather == 'foggy' ? MaskFilter.blur(BlurStyle.normal, 2) : MaskFilter.blur(BlurStyle.solid, 2);
 
-    // if (limit < 0) {
-    //   limit = 2;
-    // }
-    
-    // for (var i = startIndex; i < limit; i += 1) {
-    //   gradientColors.add(widget.colors[i]);
-    // }
-    
-    final maskFilter = widget.mode == 'light' ? MaskFilter.blur(BlurStyle.normal, 0) : MaskFilter.blur(BlurStyle.solid, 2);
-    
-
-    Paint paintSeconds = Paint()
-        ..strokeCap = StrokeCap.butt  
-        ..style = PaintingStyle.stroke
-        ..strokeWidth = 4.0
-        ..maskFilter = maskFilter
-        ..isAntiAlias = true;
-
-    Paint paintMinutes = Paint()
-        ..strokeCap = StrokeCap.butt  
-        ..style = PaintingStyle.stroke
-        ..strokeWidth = 4.0
-        ..maskFilter = maskFilter
-        ..isAntiAlias = true;
-
-    Paint paintHours = Paint()
-        ..strokeCap = StrokeCap.butt  
-        ..style = PaintingStyle.stroke
-        ..strokeWidth = 4.0
-        ..maskFilter = maskFilter
-        ..isAntiAlias = true;
+    widget.paintHours.maskFilter = maskFiler;
+    widget.paintMinutes.maskFilter = maskFiler;
+    widget.paintSeconds.maskFilter = maskFiler;
 
     return 
     LayoutBuilder(
@@ -128,13 +109,13 @@ class _ClockState extends State<Clock> {
             fit: StackFit.expand,
             children: <Widget>[
               CustomPaint(
-                painter: ArcPainter(hours, paintHours, 12, constraints.maxHeight * 0.45, 0.24, widget.colors)
+                painter: ArcPainter(hours, widget.paintHours, 12, constraints.maxHeight * 0.45, 0.24, widget.colors)
               ),
               CustomPaint(
-                painter: ArcPainter(minutes, paintMinutes, 60, constraints.maxHeight * 0.4, 0.03, widget.colors)
+                painter: ArcPainter(minutes, widget.paintMinutes, 60, constraints.maxHeight * 0.4, 0.03, widget.colors)
               ),
               CustomPaint(
-                painter: ArcPainter(seconds, paintSeconds, 60, constraints.maxHeight * 0.35, 0.015, widget.colors)
+                painter: ArcPainter(seconds, widget.paintSeconds, 60, constraints.maxHeight * 0.35, 0.015, widget.colors)
               ),
             ],
         );

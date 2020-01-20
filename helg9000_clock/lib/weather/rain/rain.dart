@@ -57,7 +57,7 @@ class RainState extends State<Rain> with TickerProviderStateMixin {
     this._drops = [];
     var rng = new Random();
     for (var i = 0; i < 200; i += 1) {
-      final drop = Drop(rng.nextDouble() * widget.width + widget.width / 2, rng.nextDouble() * widget.height, rng.nextDouble() * 20, rng.nextDouble() * 10 + 5, 
+      final drop = Drop(rng.nextDouble() * widget.width + widget.width / 2, rng.nextDouble() * widget.height, rng.nextDouble() * 20, rng.nextDouble() * 10 + 10,
       rng.nextDouble() * 0.6);
       var painter = CustomPaint(painter: DropPainter(drop.x, drop.y, drop.length, 2, drop.opacity));
       this._drops.add(drop);
