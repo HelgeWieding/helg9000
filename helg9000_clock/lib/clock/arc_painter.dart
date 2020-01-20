@@ -46,10 +46,20 @@ class ArcPainter extends CustomPainter {
     this.paintMarkerEmpty.color = this._gradient[0].withOpacity(0.2);
 
     // draw dial
+    if (this._units == 60) {
+      
+      this._gap = (2 * pi) / 50;
+    } else {
+      this._gap = (2 * pi) / 11.5;
+    }
+
     for (var i = 0; i < this._units; i++) {
-      final double start = ((2 * pi) / this._units * i);
-      canvas.drawArc(rect, -pi / 2 + start, this._gap * 2, false,
-          i < this._progress ? this._paint : paintMarkerEmpty);
+      final double unit = 2 * pi / this._units;
+      double start = unit * i;
+      double to = (((2 * pi) / this._units) + unit) - this._gap;
+      
+      canvas.drawArc(rect, (-pi / 2 + start), to, false,
+          i < this._progress ? this._paint : this.paintMarkerEmpty);
     }
   }
 
