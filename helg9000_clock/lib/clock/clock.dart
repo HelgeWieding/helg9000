@@ -105,13 +105,13 @@ class _ClockState extends State<Clock> {
         children: <Widget>[
           CustomPaint(
               painter: ArcPainter(hours, widget.paintHours, 12,
-                  constraints.maxHeight * 0.4, 0.3, widget.colors)),
+                  constraints.maxHeight * 0.4, 0.24, widget.colors)),
           CustomPaint(
               painter: ArcPainter(minutes, widget.paintMinutes, 60,
-                  constraints.maxHeight * 0.36, 0.3, widget.colors)),
+                  constraints.maxHeight * 0.36, 0.2, widget.colors)),
           CustomPaint(
               painter: ArcPainter(seconds, widget.paintSeconds, 60,
-                  constraints.maxHeight * 0.32, 0.3, widget.colors)),
+                  constraints.maxHeight * 0.32, 0.2, widget.colors)),
         ],
       );
     });
