@@ -117,12 +117,13 @@ class _DigitalClockState extends State<DigitalClock> {
     List<Color> gradientColors = List();
 
     // we need at least 2 colors for the gradient
-    if (startIndex > temperatureColors.length) {
-      startIndex = temperatureColors.length - 2;
-    }
-
-    if (limit < 0) {
+    if (startIndex == 0 && limit < 2) {
       limit = 2;
+    }
+  
+    if (startIndex == temperatureColors.length - 1) {
+      startIndex = temperatureColors.length - 2;
+      limit = temperatureColors.length;
     }
 
     for (var i = startIndex; i < limit; i += 1) {
