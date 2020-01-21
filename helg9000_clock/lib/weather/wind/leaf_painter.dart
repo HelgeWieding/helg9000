@@ -25,11 +25,12 @@ class LeafPainter extends CustomPainter {
     this.leafPainter.color =
         this.leafPainter.color.withOpacity(this.opacity / 2);
     var rect = Rect.fromCenter(
-        center: Offset(this.x, this.y), width: this.radius / 2, height: this.radius);    
-    
+        center: Offset(this.x, this.y),
+        width: this.radius / 2,
+        height: this.radius);
+
     canvas.rotate(this.opacity * 10);
     canvas.drawRect(rect, this.leafPainter);
-
   }
 
   @override

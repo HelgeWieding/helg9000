@@ -49,8 +49,8 @@ class ArcPainter extends CustomPainter {
       final double unit = 2 * pi / this._units;
       double start = unit * i;
       double to = (((2 * pi) / this._units) + unit);
-      
-      canvas.drawArc(rect, (-pi / 2 + start), to *  2 * this._gap, false,
+
+      canvas.drawArc(rect, (-pi / 2 + start), to * 2 * this._gap, false,
           i < this._progress ? this._paint : this.paintMarkerEmpty);
     }
   }

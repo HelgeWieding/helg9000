@@ -92,8 +92,6 @@ class SkyState extends State<Sky> with TickerProviderStateMixin {
         this.setSun(this._sunShine, 0, 3000);
       }
     }
-
-
   }
 
   _updateWeather() {
@@ -206,7 +204,7 @@ class SkyState extends State<Sky> with TickerProviderStateMixin {
         Tween(begin: from, end: to).animate(this.sunAnimationController)
           ..addListener(() {
             setState(() {
-                this._sunShine = sunAnimation.value;
+              this._sunShine = sunAnimation.value;
             });
           });
     this.sunAnimationController.forward();
@@ -219,7 +217,7 @@ class SkyState extends State<Sky> with TickerProviderStateMixin {
         Tween(begin: from, end: to).animate(this.moonAnimationController)
           ..addListener(() {
             setState(() {
-                this._moonShine = moonAnimation.value;
+              this._moonShine = moonAnimation.value;
             });
           });
     this.moonAnimationController.forward();
@@ -246,9 +244,12 @@ class SkyState extends State<Sky> with TickerProviderStateMixin {
         Tween(begin: 0.0, end: 1.0).animate(this.thunderAnimationController)
           ..addListener(() {
             setState(() {
-              if ((thunderAnimation.value > 0.9 && thunderAnimation.value < 0.91) ||
-                  (thunderAnimation.value > 0.92 && thunderAnimation.value < 0.93) ||
-                  (thunderAnimation.value > 0.94 && thunderAnimation.value < 0.95)) {
+              if ((thunderAnimation.value > 0.9 &&
+                      thunderAnimation.value < 0.91) ||
+                  (thunderAnimation.value > 0.92 &&
+                      thunderAnimation.value < 0.93) ||
+                  (thunderAnimation.value > 0.94 &&
+                      thunderAnimation.value < 0.95)) {
                 this._thunder = thunderAnimation.value - 0.5;
               } else {
                 this._thunder = 0.0;
@@ -260,7 +261,6 @@ class SkyState extends State<Sky> with TickerProviderStateMixin {
 
   @override
   Widget build(BuildContext context) {
-
     Paint thunder = Paint()
       ..color = Colors.white.withOpacity(1)
       ..maskFilter = MaskFilter.blur(BlurStyle.normal, 20);

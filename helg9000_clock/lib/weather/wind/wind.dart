@@ -67,7 +67,7 @@ class WindState extends State<Wind> with TickerProviderStateMixin {
 
   _startAnimation() {
     this.windAnimationController = AnimationController(
-        duration: Duration(milliseconds: 3000), vsync: this); 
+        duration: Duration(milliseconds: 3000), vsync: this);
     var rng = new Random();
     Tween(begin: 0.0, end: 1.0).animate(this.windAnimationController)
       ..addListener(() {
@@ -83,8 +83,8 @@ class WindState extends State<Wind> with TickerProviderStateMixin {
             }
 
             var painter = CustomPaint(
-                painter: LeafPainter(leaf.x, leaf.y, leaf.radius,
-                    leaf.speed, leaf.opacity));
+                painter: LeafPainter(
+                    leaf.x, leaf.y, leaf.radius, leaf.speed, leaf.opacity));
             this._leafPainters.add(painter);
           });
         });

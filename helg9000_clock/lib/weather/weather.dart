@@ -60,17 +60,13 @@ class WeatherState extends State<Weather> with TickerProviderStateMixin {
             width: constraints.maxWidth / 2,
             height: constraints.maxHeight * 0.9);
       } else if (widget.model.weatherString == 'windy') {
-        this.weather = Wind(
-          width: constraints.maxWidth,
-          height: constraints.maxHeight
-        );
+        this.weather =
+            Wind(width: constraints.maxWidth, height: constraints.maxHeight);
       } else {
-
         this.weather = Container();
       }
 
-      return ClipRect(
-        child: this.weather);
+      return ClipRect(child: this.weather);
     });
   }
 }
