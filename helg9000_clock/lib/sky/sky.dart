@@ -247,8 +247,9 @@ class SkyState extends State<Sky> with TickerProviderStateMixin {
           ..addListener(() {
             setState(() {
               if ((thunderAnimation.value > 0.9 && thunderAnimation.value < 0.91) ||
-                  (thunderAnimation.value > 0.93 && thunderAnimation.value < 0.94)) {
-                this._thunder = thunderAnimation.value;
+                  (thunderAnimation.value > 0.92 && thunderAnimation.value < 0.93) ||
+                  (thunderAnimation.value > 0.94 && thunderAnimation.value < 0.95)) {
+                this._thunder = thunderAnimation.value - 0.5;
               } else {
                 this._thunder = 0.0;
               }
@@ -281,11 +282,11 @@ class SkyState extends State<Sky> with TickerProviderStateMixin {
                 painter: SkyPainter(constraints.maxHeight * 0.4,
                     this._brightness, widget.color, haloOuter)),
             CustomPaint(
+                painter: SkyPainter(constraints.maxHeight * 0.3, this._thunder,
+                    widget.color, thunder)),
+            CustomPaint(
                 painter: SkyPainter(constraints.maxHeight * 0.4,
                     this._brightness, widget.color, haloInner)),
-            CustomPaint(
-                painter: SkyPainter(constraints.maxHeight * 0.4, this._thunder,
-                    widget.color, thunder)),
           ]);
     });
   }

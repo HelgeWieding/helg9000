@@ -120,8 +120,8 @@ class _DigitalClockState extends State<DigitalClock> {
     if (startIndex == 0 && limit < 2) {
       limit = 2;
     }
-  
-    if (startIndex == temperatureColors.length - 1) {
+
+    if (startIndex >= temperatureColors.length - 1) {
       startIndex = temperatureColors.length - 2;
       limit = temperatureColors.length;
     }
