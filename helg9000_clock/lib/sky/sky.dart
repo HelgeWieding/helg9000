@@ -21,7 +21,15 @@ class SkyState extends State<Sky> with TickerProviderStateMixin {
   double _moonShine = 0.0;
   double _thunder = 0.0;
 
-  AnimationController weatherAnimationController;
+  AnimationController sunAnimationController;
+  AnimationController moonAnimationController;
+  AnimationController skyAnimationController;
+  AnimationController thunderAnimationController;
+
+  Animation<double> sunAnimation;
+  Animation<double> moonAnimation;
+  Animation<double> skyAnimation;
+  Animation<double> thunderAnimation;
 
   Paint haloOuter = Paint()
     ..strokeCap = StrokeCap.butt
@@ -51,12 +59,10 @@ class SkyState extends State<Sky> with TickerProviderStateMixin {
     ..maskFilter = MaskFilter.blur(BlurStyle.solid, 20)
     ..isAntiAlias = true;
 
-  Animation<double> animation;
-
   @override
   void initState() {
-    super.initState();
     widget.model.addListener(_updateWeather);
+    super.initState();
   }
 
   @override
@@ -72,21 +78,55 @@ class SkyState extends State<Sky> with TickerProviderStateMixin {
       oldWidget.model.removeListener(_updateWeather());
       widget.model.addListener(_updateWeather());
     }
+    final currentMode = widget.mode;
+    final oldMode = oldWidget.mode;
 
-    if (widget.mode != oldWidget.mode) {
-      this._updateWeather();
+    if (oldMode != currentMode) {
+      if (widget.mode == 'light') {
+        this.setCloudy(this._brightness, 0.5, 2000);
+        this.setSun(this._sunShine, 1, 3000);
+        this.setMoon(this._moonShine, 0, 2000);
+      } else {
+        this.setCloudy(this._brightness, 0.2, 2000);
+        this.setMoon(this._moonShine, 1, 2000);
+        this.setSun(this._sunShine, 0, 3000);
+      }
     }
+
+
   }
 
   _updateWeather() {
-    if (this.weatherAnimationController != null) {
-      this.weatherAnimationController.dispose();
+    if (this.sunAnimationController != null) {
+      if (this.sunAnimationController.isAnimating) {
+        this.sunAnimationController.stop();
+      }
+    }
+
+    if (this.moonAnimationController != null) {
+      if (this.moonAnimationController.isAnimating) {
+        this.moonAnimationController.stop();
+      }
+    }
+
+    if (this.skyAnimationController != null) {
+      if (this.skyAnimationController.isAnimating) {
+        this.skyAnimationController.stop();
+      }
+    }
+
+    if (this.thunderAnimationController != null) {
+      if (this.thunderAnimationController.isAnimating) {
+        this.thunderAnimationController.stop();
+      }
     }
 
     switch (widget.model.weatherString) {
       case 'cloudy':
         {
-          this.setCloudy(this._brightness, 1, 2000);
+          this.setSun(this._sunShine, 0, 2000);
+          this.setMoon(this._moonShine, 0, 2000);
+          this.setCloudy(this._brightness, 0.5, 2000);
         }
         break;
 
@@ -94,9 +134,11 @@ class SkyState extends State<Sky> with TickerProviderStateMixin {
         {
           //statements
           if (widget.mode == 'light') {
-            this.setSunny(this._sunShine, 1, 0.3, 2000);
+            this.setCloudy(this._brightness, 0.2, 2000);
+            this.setSun(this._sunShine, 1, 2000);
           } else {
-            this.setMoon(0, this._moonShine, 0.1, 2000);
+            this.setMoon(this._moonShine, 1, 2000);
+            this.setCloudy(this._brightness, 0.0, 2000);
           }
         }
         break;
@@ -104,27 +146,36 @@ class SkyState extends State<Sky> with TickerProviderStateMixin {
       case 'rainy':
         {
           //statements;
-          this.setCloudy(this._brightness, 1, 2000);
+          this.setCloudy(this._brightness, 0.5, 2000);
+          this.setMoon(this._moonShine, 0, 2000);
+          this.setSun(this._sunShine, 0, 2000);
         }
         break;
 
       case 'foggy':
         {
           //statements;
-          this.setCloudy(this._brightness, 1, 2000);
+          this.setCloudy(this._brightness, 0.5, 2000);
+          this.setMoon(this._moonShine, 0, 2000);
+          this.setSun(this._sunShine, 0, 2000);
         }
         break;
 
       case 'snowy':
         {
           //statements;
-          this.setCloudy(this._brightness, 1, 2000);
+          this.setCloudy(this._brightness, 0.5, 2000);
+          this.setMoon(this._moonShine, 0, 2000);
+          this.setSun(this._sunShine, 0, 2000);
         }
         break;
 
       case 'thunderstorm':
         {
           //statements;
+          this.setCloudy(this._brightness, 0.5, 2000);
+          this.setMoon(this._moonShine, 0, 2000);
+          this.setSun(this._sunShine, 0, 2000);
           this.setThunder();
         }
         break;
@@ -141,111 +192,74 @@ class SkyState extends State<Sky> with TickerProviderStateMixin {
   void dispose() {
     widget.model.dispose();
     widget.model.removeListener(_updateWeather);
+    this.moonAnimationController.dispose();
+    this.sunAnimationController.dispose();
+    this.skyAnimationController.dispose();
+    this.thunderAnimationController.dispose();
     super.dispose();
   }
 
-  void setSunny(
-      double sunTo, double moonTo, double brightnessTo, int duration) {
-    bool brightnessDown = brightnessTo < this._brightness;
-
-    this.weatherAnimationController = AnimationController(
+  void setSun(double from, double to, int duration) {
+    this.sunAnimationController = AnimationController(
         duration: Duration(milliseconds: duration), vsync: this);
-    animation =
-        Tween(begin: 0.0, end: 1.0).animate(this.weatherAnimationController)
+    sunAnimation =
+        Tween(begin: from, end: to).animate(this.sunAnimationController)
           ..addListener(() {
             setState(() {
-              this._sunShine = animation.value;
-              this._moonShine = 0;
-
-              if (this._brightness > brightnessTo && brightnessDown) {
-                this._brightness = 1 - animation.value;
-              } else if (this._brightness < brightnessTo && !brightnessDown) {
-                this._brightness = animation.value;
-              }
+                this._sunShine = sunAnimation.value;
             });
           });
-    this.weatherAnimationController.forward();
+    this.sunAnimationController.forward();
   }
 
-  void setMoon(double sunTo, double moonTo, double brightnessTo, int duration) {
-    bool brightnessDown = brightnessTo < this._brightness;
-
-    this.weatherAnimationController = AnimationController(
+  void setMoon(double from, double to, int duration) {
+    this.moonAnimationController = AnimationController(
         duration: Duration(milliseconds: duration), vsync: this);
-    animation =
-        Tween(begin: 0.0, end: 1.0).animate(this.weatherAnimationController)
+    moonAnimation =
+        Tween(begin: from, end: to).animate(this.moonAnimationController)
           ..addListener(() {
             setState(() {
-              this._sunShine = 1 - animation.value;
-              this._moonShine = animation.value;
-
-              if (this._brightness > brightnessTo && brightnessDown) {
-                this._brightness -= animation.value;
-              }
+                this._moonShine = moonAnimation.value;
             });
           });
-    this.weatherAnimationController.forward();
+    this.moonAnimationController.forward();
   }
 
   void setCloudy(double from, double to, int duration) {
-    this.weatherAnimationController = AnimationController(
+    this.skyAnimationController = AnimationController(
         duration: Duration(milliseconds: duration), vsync: this);
-    animation =
-        Tween(begin: from, end: to).animate(this.weatherAnimationController)
+    skyAnimation =
+        Tween(begin: from, end: to).animate(this.skyAnimationController)
           ..addListener(() {
             setState(() {
-              this._sunShine = 1 - animation.value;
-              this._moonShine = 1 - animation.value;
-              this._brightness = animation.value;
+              double value = skyAnimation.value;
+              this._brightness = value;
             });
           });
-    this.weatherAnimationController.forward();
+    this.skyAnimationController.forward();
   }
 
   void setThunder() {
-    this.weatherAnimationController = AnimationController(
-        duration: Duration(milliseconds: 3000), vsync: this);
-    animation =
-        Tween(begin: 0.0, end: 1.0).animate(this.weatherAnimationController)
+    this.thunderAnimationController = AnimationController(
+        duration: Duration(milliseconds: 5000), vsync: this);
+    thunderAnimation =
+        Tween(begin: 0.0, end: 1.0).animate(this.thunderAnimationController)
           ..addListener(() {
             setState(() {
-              if ((animation.value > 0.9 && animation.value < 0.91) ||
-                  (animation.value > 0.93 && animation.value < 0.94)) {
-                this._thunder = animation.value;
+              if ((thunderAnimation.value > 0.9 && thunderAnimation.value < 0.91) ||
+                  (thunderAnimation.value > 0.93 && thunderAnimation.value < 0.94)) {
+                this._thunder = thunderAnimation.value;
               } else {
                 this._thunder = 0.0;
               }
-
-              this._brightness = 1.0;
-              this._sunShine = 0.0;
-              this._moonShine = 0.0;
             });
           });
-    this.weatherAnimationController.repeat();
-  }
-
-  getSkyOpacity(double animationValue) {
-    var val;
-
-    if (widget.mode == 'light') {
-      val = animationValue;
-    } else {
-      val = 1 - animationValue;
-    }
-
-    if (val < 0.2) {
-      val = 0.2;
-    }
-
-    if (val > 0.5) {
-      val = 0.5;
-    }
-
-    return val;
+    this.thunderAnimationController.repeat();
   }
 
   @override
   Widget build(BuildContext context) {
+
     Paint thunder = Paint()
       ..color = Colors.white.withOpacity(1)
       ..maskFilter = MaskFilter.blur(BlurStyle.normal, 20);

@@ -17,19 +17,19 @@ class Clock extends StatefulWidget {
   final Paint paintSeconds = Paint()
     ..strokeCap = StrokeCap.butt
     ..style = PaintingStyle.stroke
-    ..strokeWidth = 4.0
+    ..strokeWidth = 4
     ..isAntiAlias = true;
 
   final Paint paintMinutes = Paint()
     ..strokeCap = StrokeCap.butt
     ..style = PaintingStyle.stroke
-    ..strokeWidth = 4.0
+    ..strokeWidth = 4
     ..isAntiAlias = true;
 
   final Paint paintHours = Paint()
     ..strokeCap = StrokeCap.butt
     ..style = PaintingStyle.stroke
-    ..strokeWidth = 4.0
+    ..strokeWidth = 4
     ..isAntiAlias = true;
 
   @override
@@ -108,10 +108,10 @@ class _ClockState extends State<Clock> {
                   constraints.maxHeight * 0.4, 0.24, widget.colors)),
           CustomPaint(
               painter: ArcPainter(minutes, widget.paintMinutes, 60,
-                  constraints.maxHeight * 0.36, 0.2, widget.colors)),
+                  constraints.maxHeight * 0.37, 0.2, widget.colors)),
           CustomPaint(
               painter: ArcPainter(seconds, widget.paintSeconds, 60,
-                  constraints.maxHeight * 0.32, 0.2, widget.colors)),
+                  constraints.maxHeight * 0.34, 0.2, widget.colors)),
         ],
       );
     });

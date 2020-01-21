@@ -66,7 +66,6 @@ class RainState extends State<Rain> with TickerProviderStateMixin {
   }
 
   _startAnimation() {
-    print('starting rain animation');
     this.rainAnimationController = AnimationController(
         duration: Duration(milliseconds: 15000), vsync: this);
     Tween(begin: 0.0, end: 1.0).animate(this.rainAnimationController)

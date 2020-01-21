@@ -45,14 +45,6 @@ class ArcPainter extends CustomPainter {
 
     this.paintMarkerEmpty.color = this._gradient[0].withOpacity(0.2);
 
-    // draw dial
-    // if (this._units == 60) {
-      
-    //   this._gap = (2 * pi) / 50;
-    // } else {
-    //   this._gap = (2 * pi) / 11.5;
-    // }
-
     for (var i = 0; i < this._units; i++) {
       final double unit = 2 * pi / this._units;
       double start = unit * i;

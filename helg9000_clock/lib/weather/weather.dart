@@ -2,6 +2,7 @@ import 'package:flutter_clock_helper/model.dart';
 import 'package:flutter/material.dart';
 import 'package:helg9000_clock/weather/rain/rain.dart';
 import 'package:helg9000_clock/weather/snow/snow.dart';
+import 'package:helg9000_clock/weather/wind/wind.dart';
 
 class Weather extends StatefulWidget {
   final ClockModel model;
@@ -58,11 +59,18 @@ class WeatherState extends State<Weather> with TickerProviderStateMixin {
         this.weather = Snow(
             width: constraints.maxWidth / 2,
             height: constraints.maxHeight * 0.9);
+      } else if (widget.model.weatherString == 'windy') {
+        this.weather = Wind(
+          width: constraints.maxWidth,
+          height: constraints.maxHeight
+        );
       } else {
+
         this.weather = Container();
       }
 
-      return this.weather;
+      return ClipRect(
+        child: this.weather);
     });
   }
 }

@@ -1,32 +1,35 @@
 import 'package:flutter/material.dart';
 
-class CloudPainter extends CustomPainter {
+class LeafPainter extends CustomPainter {
   double x;
   double y;
   double radius;
   double speed;
   double opacity;
 
-  Paint cloudPainter = Paint()
+  Paint leafPainter = Paint()
     ..color = Colors.black
     ..maskFilter = MaskFilter.blur(BlurStyle.solid, 2)
     ..style = PaintingStyle.fill;
 
-  CloudPainter(
+  LeafPainter(
     this.x,
     this.y,
     this.radius,
     this.speed,
     this.opacity,
-  ) {}
+  );
 
   @override
   void paint(Canvas canvas, Size size) {
-    this.cloudPainter.color =
-        this.cloudPainter.color.withOpacity(this.opacity / 2);
-    var rect = Rect.fromCircle(
-        center: Offset(this.x, this.y), radius: this.radius / 2);
-    canvas.drawOval(rect, this.cloudPainter);
+    this.leafPainter.color =
+        this.leafPainter.color.withOpacity(this.opacity / 2);
+    var rect = Rect.fromCenter(
+        center: Offset(this.x, this.y), width: this.radius / 2, height: this.radius);    
+    
+    canvas.rotate(this.opacity * 10);
+    canvas.drawRect(rect, this.leafPainter);
+
   }
 
   @override
