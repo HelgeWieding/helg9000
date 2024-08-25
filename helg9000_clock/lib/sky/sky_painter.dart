@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 class SkyPainter extends CustomPainter {
   Paint _paint;
 
-  Offset center;
+  late Offset center;
   double _radius;
   double _fraction;
   Color _color;

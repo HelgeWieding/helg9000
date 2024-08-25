@@ -11,13 +11,13 @@ class Rain extends StatefulWidget {
   @override
   State<StatefulWidget> createState() => RainState();
 
-  const Rain({this.width, this.height, this.orientation});
+  const Rain({required this.width, required this.height, required this.orientation});
 }
 
 class RainState extends State<Rain> with TickerProviderStateMixin {
   var _dropPainters = <Widget>[];
   var _drops = <Drop>[];
-  AnimationController rainAnimationController;
+  late AnimationController rainAnimationController;
 
   @override
   void initState() {

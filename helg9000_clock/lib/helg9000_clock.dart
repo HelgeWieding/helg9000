@@ -114,7 +114,7 @@ class _DigitalClockState extends State<DigitalClock> {
         ? ((maxTemp + 20) / 2).floor()
         : temperatureColors.length;
 
-    List<Color> gradientColors = List();
+    List<Color> gradientColors = [];
 
     // we need at least 2 colors for the gradient
     if (startIndex == 0 && limit < 2) {
@@ -131,7 +131,7 @@ class _DigitalClockState extends State<DigitalClock> {
     }
 
     return Container(
-        color: colors[_Element.background],
+        color: colors[_Element.background] as Color? ?? Colors.black,
         alignment: Alignment.center,
         child: Stack(
           alignment: Alignment.center,
@@ -140,12 +140,12 @@ class _DigitalClockState extends State<DigitalClock> {
             Sky(
                 color: gradientColors[0],
                 model: widget.model,
-                mode: colors[_Element.mode]),
+                mode: colors[_Element.mode] as String),
             Clock(
                 model: widget.model,
                 colors: gradientColors,
-                mode: colors[_Element.mode]),
-            Weather(model: widget.model, mode: colors[_Element.mode]),
+                mode: colors[_Element.mode] as String),
+            Weather(model: widget.model, mode: colors[_Element.mode] as String),
           ],
         ));
   }

@@ -11,13 +11,13 @@ class Wind extends StatefulWidget {
   @override
   State<StatefulWidget> createState() => WindState();
 
-  const Wind({this.width, this.height, this.orientation});
+  const Wind({required this.width, required this.height, required this.orientation});
 }
 
 class WindState extends State<Wind> with TickerProviderStateMixin {
   var _leafPainters = <Widget>[];
   var _leafes = <Leaf>[];
-  AnimationController windAnimationController;
+  late AnimationController windAnimationController;
 
   @override
   void initState() {
