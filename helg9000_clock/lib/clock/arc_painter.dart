@@ -9,10 +9,10 @@ class ArcPainter extends CustomPainter {
 
   List<Color> _gradient;
 
-  Offset center;
+  late Offset center;
   double _radius;
 
-  Paint paintMarkerEmpty;
+  late Paint paintMarkerEmpty;
 
   ArcPainter(
     this._progress,

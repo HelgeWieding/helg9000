@@ -11,11 +11,11 @@ class Weather extends StatefulWidget {
   @override
   State<StatefulWidget> createState() => WeatherState();
 
-  const Weather({this.model, this.mode});
+  const Weather({required this.model, required this.mode});
 }
 
 class WeatherState extends State<Weather> with TickerProviderStateMixin {
-  Widget weather;
+  late Widget weather;
 
   @override
   void initState() {
@@ -54,14 +54,16 @@ class WeatherState extends State<Weather> with TickerProviderStateMixin {
           widget.model.weatherString == 'thunderstorm') {
         this.weather = Rain(
             width: constraints.maxWidth / 2,
-            height: constraints.maxHeight * 0.9);
+            height: constraints.maxHeight * 0.9,
+            orientation: MediaQuery.of(context).orientation);
       } else if (widget.model.weatherString == 'snowy') {
         this.weather = Snow(
             width: constraints.maxWidth / 2,
-            height: constraints.maxHeight * 0.9);
+            height: constraints.maxHeight * 0.9,
+            orientation: MediaQuery.of(context).orientation);
       } else if (widget.model.weatherString == 'windy') {
         this.weather =
-            Wind(width: constraints.maxWidth, height: constraints.maxHeight);
+            Wind(width: constraints.maxWidth, height: constraints.maxHeight, orientation: MediaQuery.of(context).orientation);
       } else {
         this.weather = Container();
       }

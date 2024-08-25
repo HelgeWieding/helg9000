@@ -12,7 +12,7 @@ class Sky extends StatefulWidget {
   @override
   State<StatefulWidget> createState() => SkyState();
 
-  const Sky({this.model, this.color, this.mode});
+  const Sky({required this.model, required this.color, required this.mode});
 }
 
 class SkyState extends State<Sky> with TickerProviderStateMixin {
@@ -21,15 +21,15 @@ class SkyState extends State<Sky> with TickerProviderStateMixin {
   double _moonShine = 0.0;
   double _thunder = 0.0;
 
-  AnimationController sunAnimationController;
-  AnimationController moonAnimationController;
-  AnimationController skyAnimationController;
-  AnimationController thunderAnimationController;
+  late AnimationController sunAnimationController;
+  late AnimationController moonAnimationController;
+  late AnimationController skyAnimationController;
+  late AnimationController thunderAnimationController;
 
-  Animation<double> sunAnimation;
-  Animation<double> moonAnimation;
-  Animation<double> skyAnimation;
-  Animation<double> thunderAnimation;
+  late Animation<double> sunAnimation;
+  late Animation<double> moonAnimation;
+  late Animation<double> skyAnimation;
+  late Animation<double> thunderAnimation;
 
   Paint haloOuter = Paint()
     ..strokeCap = StrokeCap.butt

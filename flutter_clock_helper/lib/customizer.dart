@@ -57,8 +57,8 @@ class _ClockCustomizerState extends State<ClockCustomizer> {
 
   void _handleModelChange() => setState(() {});
 
-  Widget _enumMenu<T>(
-      String label, T value, List<T> items, ValueChanged<T> onChanged) {
+  Widget _enumMenu<T extends Object>(
+      String label, T value, List<T> items, ValueChanged<T?>? onChanged) {
     return InputDecorator(
       decoration: InputDecoration(
         labelText: label,
@@ -92,7 +92,7 @@ class _ClockCustomizerState extends State<ClockCustomizer> {
   }
 
   Widget _textField(
-      String currentValue, String label, ValueChanged<Null> onChanged) {
+      String currentValue, String label, ValueChanged<String> onChanged) {
     return TextField(
       decoration: InputDecoration(
         hintText: currentValue,
@@ -123,10 +123,12 @@ class _ClockCustomizerState extends State<ClockCustomizer> {
                 }),
                 _enumMenu('Theme', _themeMode,
                     ThemeMode.values.toList()..remove(ThemeMode.system),
-                    (ThemeMode mode) {
-                  setState(() {
-                    _themeMode = mode;
-                  });
+                    (ThemeMode? mode) {
+                  if (mode != null) {
+                    setState(() {
+                      _themeMode = mode;
+                    });
+                  }
                 }),
                 _switch('24-hour format', _model.is24HourFormat, (bool value) {
                   setState(() {
@@ -135,16 +137,20 @@ class _ClockCustomizerState extends State<ClockCustomizer> {
                 }),
                 _enumMenu(
                     'Weather', _model.weatherCondition, WeatherCondition.values,
-                    (WeatherCondition condition) {
-                  setState(() {
-                    _model.weatherCondition = condition;
-                  });
+                    (WeatherCondition? condition) {
+                      if (condition != null) {
+                        setState(() {
+                          _model.weatherCondition = condition;
+                        });
+                      }
                 }),
                 _enumMenu('Units', _model.unit, TemperatureUnit.values,
-                    (TemperatureUnit unit) {
-                  setState(() {
-                    _model.unit = unit;
-                  });
+                    (TemperatureUnit? unit) {
+                      if (unit != null) {
+                        setState(() {
+                          _model.unit = unit;
+                        });
+                      }
                 }),
               ],
             ),
@@ -194,7 +200,7 @@ class _ClockCustomizerState extends State<ClockCustomizer> {
       themeMode: _themeMode,
       debugShowCheckedModeBanner: false,
       home: Scaffold(
-        resizeToAvoidBottomPadding: false,
+        resizeToAvoidBottomInset: false,
         endDrawer: _configDrawer(context),
         body: SafeArea(
           child: GestureDetector(

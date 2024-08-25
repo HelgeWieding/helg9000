@@ -12,13 +12,13 @@ class Snow extends StatefulWidget {
   @override
   State<StatefulWidget> createState() => SnowState();
 
-  const Snow({this.width, this.height, this.orientation});
+  const Snow({required this.width, required this.height, required this.orientation});
 }
 
 class SnowState extends State<Snow> with TickerProviderStateMixin {
   var _snowPainters = <Widget>[];
   var _flakes = <Flake>[];
-  AnimationController snowAnimationController;
+  late AnimationController snowAnimationController;
 
   @override
   void initState() {

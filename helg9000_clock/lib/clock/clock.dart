@@ -8,11 +8,11 @@ import 'package:flutter/material.dart';
 import 'package:helg9000_clock/clock/arc_painter.dart';
 
 class Clock extends StatefulWidget {
-  Clock({this.model, this.mode, this.colors});
-
   final ClockModel model;
   final String mode;
   final colors;
+
+  Clock({required this.model, required this.mode, required this.colors});
 
   final Paint paintSeconds = Paint()
     ..strokeCap = StrokeCap.butt
@@ -38,11 +38,18 @@ class Clock extends StatefulWidget {
 
 class _ClockState extends State<Clock> {
   DateTime _dateTime = DateTime.now();
-  Timer _timer;
+  late Timer _timer;
+
+  void _startTimer() {
+    _timer = Timer.periodic(Duration(seconds: 1), (Timer timer) {
+      // Timer logic here
+    });
+  }
 
   @override
   void initState() {
     super.initState();
+    _startTimer();
     widget.model.addListener(_updateModel);
     _updateTime();
     _updateModel();

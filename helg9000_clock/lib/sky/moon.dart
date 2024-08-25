@@ -5,7 +5,7 @@ import 'package:flutter/material.dart';
 class Moon extends CustomPainter {
   Paint _paint;
 
-  Offset center;
+  late Offset center;
   double _radius;
   double fraction = 0.0;
 
